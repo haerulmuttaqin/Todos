@@ -1,5 +1,6 @@
 package id.haeworks.todo_list_presentation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -76,33 +79,41 @@ fun ListScreen(
             )
         }
     ) { paddingValues ->
-        PullToRefreshBox(
-            modifier = Modifier.fillMaxSize(),
-            isRefreshing = state.isRefreshing,
-            onRefresh = {
-                onEvent(ListEvent.OnGetList(isRefresh = true))
-            }
-        ) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                state = scrollState,
-                contentPadding = PaddingValues(vertical = 8.dp)
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
-                items(state.list) { todo ->
-                    TodoListItem(
-                        item = todo,
-                        onCheckedChange = {
-                            onEvent(ListEvent.OnCheckedChange(todo))
+                CircularProgressIndicator()
+            }
+        } else {
+            PullToRefreshBox(
+                modifier = Modifier.fillMaxSize(),
+                isRefreshing = state.isRefreshing,
+                onRefresh = {
+                    onEvent(ListEvent.OnGetList(isRefresh = true))
+                }
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    state = scrollState,
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    items(state.list) { todo ->
+                        TodoListItem(
+                            item = todo,
+                            onCheckedChange = {
+                                onEvent(ListEvent.OnCheckedChange(todo))
+                            }
+                        ) {
+                            navHostController.navigate(DetailRoute(todo.id))
                         }
-                    ) {
-                        navHostController.navigate(DetailRoute(todo.id))
+                        HorizontalDivider()
                     }
-                    HorizontalDivider()
                 }
             }
         }
     }
-
 }

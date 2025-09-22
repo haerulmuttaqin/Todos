@@ -1,6 +1,7 @@
 package id.haeworks.todo_detail_presentation
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -95,13 +97,21 @@ fun DetailScreen(
             )
         }
     ) { paddingValues ->
-        PullToRefreshBox(
-            modifier = Modifier.fillMaxSize(),
-            isRefreshing = state.isRefreshing,
-            onRefresh = {
-                onEvent(DetailEvent.OnGetDetail(state.detail?.id.orZero(), isRefresh = true))
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
             }
-        ) {
+        } else {
+            PullToRefreshBox(
+                modifier = Modifier.fillMaxSize(),
+                isRefreshing = state.isRefreshing,
+                onRefresh = {
+                    onEvent(DetailEvent.OnGetDetail(state.detail?.id.orZero(), isRefresh = true))
+                }
+            ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -163,6 +173,7 @@ fun DetailScreen(
                     }
                 }
             }
+        }
     }
 
 }
