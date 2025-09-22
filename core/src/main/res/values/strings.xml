@@ -4,5 +4,5 @@
     <string name="ok">Ok</string>
     <string name="detail">Detail</string>
     <string name="please_check_internet_connection">Please check your internet connection!</string>
-    <string name="created_by">Created by User ID: %1$d</string>
+    <string name="created_by">Created by User ID: %1$s</string>
 </resources>
