@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.splashcreen)
+    implementation(libs.compose.viewmodel)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
 
@@ -75,6 +76,11 @@ dependencies {
     implementation(projects.features.todoDetail.todoDetailData)
     implementation(projects.features.todoDetail.todoDetailDomain)
     implementation(projects.features.todoDetail.todoDetailPresentation)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
